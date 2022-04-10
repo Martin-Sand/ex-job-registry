@@ -1,0 +1,21 @@
+body{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#visitList{
+    display: flex;
+    flex-direction: column;
+}
+
+.listItem{
+    display: flex;
+    flex-direction: row;
+    padding: 5px; /* this */
+}
+
+.listItem > p{
+    padding: 5px; /* this */
+}
