@@ -1,35 +1,48 @@
 var socket = io();
 
-const success = (position) => {
-  console.log(position)
-  const longitude = position.coords.longitude;
-  const latitude = position.coords.latitude;
-
-  var coor = 'Longitute = ' + longitude + '\n' + 'latitude = ' + latitude;
-  console.log(coor)
-
-  return coor
-}
-const error = (error) => {
-  current_location.textContent = `Couldn't access your location \n Reason: ${PositionError.message}`;
-}
-const getLocation = async () => {
-  if(navigator.geolocation)
-    navigator.geolocation.getCurrentPosition(success,error);
-  else 
-    current_location.textContent = `Your browser does not support this feature`;
-}
 
 
 
 window.onload = async function(){ 
 
-  var coor = await getLocation()
-  console.log(coor)
 
+  
+  //geolocation functions
+  
+  const success = async (position) => {
+    const longitude = position.coords.longitude;
+    const latitude = position.coords.latitude;
+
+    longitudeCoor.innerText = longitude;
+    latitudeCoor.innerText = latitude;
+
+    var coor = [longitude, latitude]
+
+    console.log(coor)
+  }
+  const error = (error) => {
+    current_location.textContent = `Couldn't access your location \n Reason: ${PositionError.message}`;
+  }
+  const getLocation = () => {
+    if(navigator.geolocation){
+      navigator.geolocation.getCurrentPosition(success,error);
+    }
+    else 
+      current_location.textContent = `Your browser does not support this feature`;
+
+  }
+
+
+  //get coordinates
+
+  var geoLoc = await getLocation()
+  //Get elements in HTML
   var serviceButton= document.getElementById('serviceBtn');
   var repButton= document.getElementById('repBtn');
   var inspectionButton= document.getElementById('inspectionBtn');
+
+  var latitudeCoor = document.getElementById('latCoor');
+  var longitudeCoor = document.getElementById('longCoor');
 
   var header = document.getElementById('ElevatorIDHeader');
 
@@ -41,18 +54,28 @@ window.onload = async function(){
 
   header.innerText = "Elevator ID: " + elevatorID
 
-  serviceButton.onclick = function() {
-    socket.emit('new_visit', [elevatorID, coor]);
+
+  //onclick functions
+  serviceButton.onclick = function(coor) {
+    var coor = latitudeCoor.innerText + ',' + longitudeCoor.innerText
+    socket.emit('new_visit', [elevatorID, coor, "Service"]);
   }
   repButton.onclick = function() {
-    socket.emit('new_visit', [elevatorID, coor]);
+    var coor = latitudeCoor.innerText + ',' + longitudeCoor.innerText
+    socket.emit('new_visit', [elevatorID, coor, "Reperation"]);
   }
   inspectionButton.onclick = function() {
-    socket.emit('new_visit', [elevatorID, coor]);
+    var coor = latitudeCoor.innerText + ',' + longitudeCoor.innerText
+    socket.emit('new_visit', [elevatorID, coor, "Inspection"]);
   }
 
+
+  //Open HM on visit registered
   socket.on('handyman', function(open_hm) {
     location.href = open_hm;
   });
+
+
+
 };
 

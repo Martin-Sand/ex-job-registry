@@ -11,7 +11,13 @@
 </head>
 <body>
     <h1>Visit List</h1>
-    <div id="selectionContainer"></div>
+    <div id="selectionContainer">
+        <label for="elevatorID">Elevator ID:</label>
+        <input type="text" id="elevatorIDfilter" name="elevatorID"><br><br>
+        <label for="daysFromToday">How many days backwards:</label>
+        <input type="text" id="daysFilter" name="daysFromToday"><br><br>
+        <button id="filterBtn" class="filterListBtn">Filter List</button>
+    </div>
     <div id="visitList">
     </div>
 </body>

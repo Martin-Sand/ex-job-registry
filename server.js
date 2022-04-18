@@ -54,14 +54,25 @@ io.on('connection', (socket) => {
         });
     })
 
+    //Client want filtered list
+    socket.on('filter_list', ([ID, daysBackwards]) => {
+        Visit.find({elevatorID: ID}).limit(50).sort({$natural:-1}).then(r => {
+            //send list to client
+            io.emit('visit_list', r);
+        });
+    })
+
     socket.on('new_visit', (data_array) => {
         try{
             const id = data_array[0];
             const coor = data_array[1];
+            const type = data_array[2];
+            console.log(coor)
             
             let visit = {
                 'elevatorID': id,
-                'coor': coor
+                'jobType': type,
+                'coordinates': coor
             }
             try{
                 Visit.create(visit).then( () => {

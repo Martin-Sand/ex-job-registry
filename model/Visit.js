@@ -6,6 +6,14 @@ var visitSchema = new Schema({
         type: String,
         required: true
     },
+    jobType: {
+        type: String,
+        default: "Unspecified"
+    },
+    coordinates: {
+        type: String,
+        default: "Not found"
+    },
 }, {
     timestamps: true
 });
